@@ -1,25 +1,18 @@
-import logo from './logo.svg';
-import './App.css';
+import SortTable from "./compontents/SortTable"
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const data = [
+        { id: 1, name: "Herp", surname: "Perp", age: 31 },
+        { id: 2, name: "Xerp", surname: "Eerp", age: 32 },
+        { id: 3, name: "Zerp", surname: "Rerp", age: 33 },
+        { id: 4, name: "Aerp", surname: "Ferp", age: 34 },
+        { id: 5, name: "Eerp", surname: "Terp", age: 1 },
+    ]
+    return (
+        <div className="App">
+            <SortTable tableData={data} />
+        </div>
+    )
 }
 
-export default App;
+export default App
