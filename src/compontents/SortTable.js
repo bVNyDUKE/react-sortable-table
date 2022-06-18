@@ -4,42 +4,38 @@ const SortTable = ({ tableData }) => {
     const [filter, setFilter] = useState("")
     const [sort, setSort] = useState({ col: false, invert: false })
 
-    const headers = tableData.reduce((prev, curr) => {
-        for (let key in curr) {
-            if (!prev.includes(key)) {
-                prev.push(key)
-            }
+    const headers = React.useMemo(() => {
+        return tableData.reduce((prev, curr) => {
+            Object.keys(curr).forEach(key => { !prev.includes(key) && prev.push(key)})
+            return prev
+        }, [])
+    }, [tableData])
+
+    const filtered = React.useMemo(() => {
+        if(!filter){
+            return tableData
         }
-        return prev
-    }, [])
 
-    const filtered =
-        filter === ""
-            ? tableData
-            : tableData.filter((x) => {
-                  let flag = false
-                  for (let key in x) {
-                      if (String(x[key]).search(filter) !== -1) {
-                          flag = true
-                      }
-                  }
-                  return flag
-              })
+        return tableData.filter((row) => Object.values(row).find((cell) => String(cell).includes(filter)))
+    }, [filter, tableData])
 
-    const sortBy = (field, invert) => {
+    const sortBy = React.useCallback((field) => {
         const key = function (x) {
             return String(x[field]).toUpperCase()
         }
 
-        invert = !invert ? 1 : -1
+        let invert = !sort.invert ? 1 : -1
 
         return function (a, b) {
-            return (a = key(a)), (b = key(b)), invert * ((a > b) - (b > a))
+            const A = key(a)
+            const B = key(b)
+            return  invert * ((A > B) - (B > A))
         }
-    }
-    const sorted = sort.col
-        ? filtered.sort(sortBy(sort.col, sort.invert))
-        : filtered
+    }, [sort])
+
+    const sorted = React.useMemo(() => sort.col
+        ? filtered.sort(sortBy(sort.col))
+        : filtered, [filtered, sort.col, sortBy])
 
     function headerClick(col) {
         setSort((prev) => {
