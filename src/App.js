@@ -1,4 +1,4 @@
-import SortTable from "./compontents/SortTable"
+import SortTable from "./components/SortTable"
 
 function App() {
     const data = [
